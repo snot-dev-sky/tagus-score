@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f8fc;
+  color: #1f2937;
+}
+
+.app-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+h1 {
+  color: #111827;
+}
