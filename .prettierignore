@@ -1,0 +1,6 @@
+*.md
+.cache
+package.json
+dist
+vendor
+*.ejs
