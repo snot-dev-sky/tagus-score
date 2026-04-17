@@ -4,6 +4,7 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -12,6 +13,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "types": ["@chakra-ui/react"]
   }
 }
