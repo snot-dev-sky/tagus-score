@@ -14,7 +14,6 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "moduleResolution": "bundler",
-    "isolatedModules": true,
-    "types": ["@chakra-ui/react"]
+    "isolatedModules": true
   }
 }
