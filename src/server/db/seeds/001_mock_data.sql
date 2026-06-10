@@ -7,12 +7,11 @@ VALUES ('active', 29.99, NOW() - INTERVAL '2 months', NOW() + INTERVAL '10 month
 RETURNING id AS subscription_id \gset
 
 -- Agent (user)
-INSERT INTO users (email, password_hash, name, is_admin, auth_provider, subscription_id, last_login)
+INSERT INTO users (email, password_hash, name, auth_provider, subscription_id, last_login)
 VALUES (
   'joao.silva@tagusscore.pt',
   '$2b$10$CwTycUXWue0Thq9StjUM0uJ8gNW2Gp3JEzZ.Q4/ItVhLFfA9Sjmre',
   'João Silva',
-  false,
   'email',
   :'subscription_id',
   NOW() - INTERVAL '1 day'
