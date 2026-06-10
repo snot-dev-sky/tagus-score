@@ -5,6 +5,6 @@ export interface AgentForm {
   agent_id: string;
   form_id: string;
   status: AgentFormStatus;
-  created_at: Date;
   expires_at: Date;
+  created_at: Date;
 }

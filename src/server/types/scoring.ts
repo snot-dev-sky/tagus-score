@@ -1,7 +1,6 @@
 export interface ScoringConfig {
-  budget: number;
-  urgency: number;
-  property_type: number;
-  area: number;
-  other: number;
+  budget_weight: number;
+  urgency_weight: number;
+  property_type_weight: number;
+  area_weight: number;
 }

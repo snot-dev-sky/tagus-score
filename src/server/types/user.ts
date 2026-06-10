@@ -1,11 +1,14 @@
+export type AuthProvider = 'email' | 'google';
+
 export interface User {
   id: string;
   email: string;
-  password_hash: string;
+  password_hash: string | null;
   name: string;
-  subscription_active: boolean;
-  subscription_end_date?: Date;
   is_admin: boolean;
-  last_login?: Date;
+  auth_provider: AuthProvider;
+  google_id: string | null;
+  subscription_id: string;
+  last_login: Date | null;
   created_at: Date;
 }
