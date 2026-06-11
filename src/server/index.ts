@@ -1,6 +1,7 @@
 import express from 'express';
 import type { Express, Request, Response } from 'express';
 import { pool } from './db';
+import authRouter from './routes/auth';
 
 const app: Express = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,8 @@ app.get('/api/health/db', async (req: Request, res: Response) => {
     res.status(500).json({ status: 'error', message: (error as Error).message });
   }
 });
+
+app.use('/api/auth', authRouter);
 
 // Start server
 app.listen(PORT, () => {
