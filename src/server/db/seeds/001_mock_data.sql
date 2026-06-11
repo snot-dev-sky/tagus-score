@@ -10,7 +10,7 @@ RETURNING id AS subscription_id \gset
 INSERT INTO users (email, password_hash, name, auth_provider, subscription_id, last_login)
 VALUES (
   'joao.silva@tagusscore.pt',
-  '$2b$10$CwTycUXWue0Thq9StjUM0uJ8gNW2Gp3JEzZ.Q4/ItVhLFfA9Sjmre',
+  '$2b$10$kKPVdD7S4YIBneAxyos8mOVa4AdTrriQGynAY3vGX5mSzPY1VOrIC', -- Test1234!
   'João Silva',
   'email',
   :'subscription_id',
