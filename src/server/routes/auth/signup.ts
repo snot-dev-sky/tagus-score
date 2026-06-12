@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import type { Request, Response } from 'express';
-import { transaction } from '../db';
-import { createUser, findUserByEmail } from '../db/queries/users';
-import { createPendingSubscription } from '../db/queries/subscriptions';
-import { AuthService } from '../services/auth';
-import { ErrorCodes } from '../../shared/errorCodes';
-import { missingSignupFields, validateEmail, validatePassword } from '../utils';
+import { transaction } from '../../db';
+import { createUser, findUserByEmail } from '../../db/queries/users';
+import { createPendingSubscription } from '../../db/queries/subscriptions';
+import { AuthService } from '../../services/auth';
+import { ErrorCodes } from '../../../shared/errorCodes';
+import { missingSignupFields, validateEmail, validatePassword } from '../../utils';
 
 const router = Router();
 
