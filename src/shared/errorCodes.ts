@@ -13,6 +13,8 @@ export const ErrorCodes = {
     USE_GOOGLE_LOGIN: 'ERR_00102',
     MISSING_FIELDS: 'ERR_00103',
     INVALID_EMAIL_FORMAT: 'ERR_00104',
+    EMAIL_ALREADY_EXISTS: 'ERR_00105',
+    PASSWORD_TOO_SHORT: 'ERR_00106',
   },
 } as const;
 
