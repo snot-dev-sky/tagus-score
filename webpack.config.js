@@ -30,6 +30,12 @@ module.exports = {
     hot: true,
     historyApiFallback: true,
     watchFiles: ['src/client/**/*'],
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'http://localhost:5000',
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({

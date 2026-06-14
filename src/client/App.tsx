@@ -1,7 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LeadForm from './Lead-Form';
-import { Button } from '@heroui/react';
+import LeadForm from './pages/Lead-Form';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
+import { Button, Toast } from '@heroui/react';
 import './styles/global.css';
 
 const App: React.FC = () => {
@@ -22,8 +25,12 @@ const App: React.FC = () => {
             }
           />
           <Route path="/lead-form" element={<LeadForm />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
+      <Toast.Provider />
     </Router>
   );
 };
