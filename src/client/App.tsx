@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LeadForm from './pages/Lead-Form';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Dashboard from './pages/Dashboard';
+import LeadForm from './pages/lead-form';
+import Login from './pages/login';
+import Signup from './pages/signup';
+import Dashboard from './pages/dashboard';
 import { Button, Toast } from '@heroui/react';
 import './styles/global.css';
 

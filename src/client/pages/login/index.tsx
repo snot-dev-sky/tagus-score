@@ -12,9 +12,9 @@ import {
   linkVariants,
   toast,
 } from '@heroui/react';
-import { ErrorCodes } from '../../shared/errorCodes';
-import { ApiRequestError, login } from '../lib/api';
-import { setToken } from '../lib/auth';
+import { ErrorCodes } from '../../../shared/errorCodes';
+import { ApiRequestError, login } from '../../lib/api';
+import { setToken } from '../../lib/auth';
 
 const ERROR_MESSAGES: Record<string, string> = {
   [ErrorCodes.Auth.INVALID_CREDENTIALS]: 'Email ou password incorretos.',
