@@ -15,6 +15,8 @@ export const ErrorCodes = {
     INVALID_EMAIL_FORMAT: 'ERR_00104',
     EMAIL_ALREADY_EXISTS: 'ERR_00105',
     PASSWORD_TOO_SHORT: 'ERR_00106',
+    NO_TOKEN: 'ERR_00107',
+    INVALID_TOKEN: 'ERR_00108',
   },
 } as const;
 
