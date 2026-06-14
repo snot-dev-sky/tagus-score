@@ -6,7 +6,7 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src/server/**/*", "src/shared/**/*"],
+  "include": ["src/server/**/*"],
   "exclude": ["node_modules", "src/client"],
   "ts-node": {
     "files": true

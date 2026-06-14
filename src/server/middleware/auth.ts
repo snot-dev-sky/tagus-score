@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { AuthService } from '../services/auth';
-import { ErrorCodes } from '../../shared/errorCodes';
+import { ErrorCodes } from '../constants/errorCodes';
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
