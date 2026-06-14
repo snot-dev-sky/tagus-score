@@ -2,6 +2,8 @@ import express from 'express';
 import type { Express, Request, Response } from 'express';
 import { pool } from './db';
 import authRouter from './routes/auth';
+import agentsRouter from './routes/agents';
+import { authMiddleware } from './middleware/auth';
 
 const app: Express = express();
 const PORT = process.env.PORT || 5000;
@@ -28,6 +30,7 @@ app.get('/api/health/db', async (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/agents', authMiddleware, agentsRouter);
 
 // Start server
 app.listen(PORT, () => {
