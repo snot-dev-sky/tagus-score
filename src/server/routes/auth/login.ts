@@ -2,7 +2,7 @@ import { Router } from 'express';
 import type { Request, Response } from 'express';
 import { findUserByEmail, updateLastLogin } from '../../db/queries/users';
 import { AuthService } from '../../services/auth';
-import { ErrorCodes } from '../../../shared/errorCodes';
+import { ErrorCodes } from '../../constants/errorCodes';
 import { missingLoginFields, validateEmail } from '../../utils';
 
 const router = Router();

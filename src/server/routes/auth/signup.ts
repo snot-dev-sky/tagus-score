@@ -4,7 +4,7 @@ import { transaction } from '../../db';
 import { createUser, findUserByEmail } from '../../db/queries/users';
 import { createPendingSubscription } from '../../db/queries/subscriptions';
 import { AuthService } from '../../services/auth';
-import { ErrorCodes } from '../../../shared/errorCodes';
+import { ErrorCodes } from '../../constants/errorCodes';
 import { missingSignupFields, validateEmail, validatePassword } from '../../utils';
 
 const router = Router();
