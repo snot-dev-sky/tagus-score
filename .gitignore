@@ -29,3 +29,6 @@ yarn-error.log*
 # Cache
 .eslintcache
 .cache/
+
+# Git worktrees for parallel work
+worktrees/
