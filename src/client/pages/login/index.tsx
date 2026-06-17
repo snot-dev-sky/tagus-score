@@ -12,6 +12,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   [ErrorCodes.Auth.INVALID_EMAIL_FORMAT]: 'Formato de email inválido.',
 };
 
+// Simple Google "G" mark for the button
+// TODO: Replace with actual Google logo if possible, ensuring to follow Google's branding guidelines
 const GoogleMark = () => (
   <span
     style={{
@@ -111,7 +113,7 @@ const Login: React.FC = () => {
                   <Checkbox.Indicator />
                 </Checkbox.Control>
                 <Checkbox.Content className="whitespace-nowrap text-[13px] text-foreground">
-                  Remember for 30 days
+                  Remember me
                 </Checkbox.Content>
               </Checkbox>
               <Link href="#" className="whitespace-nowrap text-[13px] font-semibold text-accent">
