@@ -1,11 +1,15 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+:root {
+  --accent: #9353D3;             /* violeta da marca (Style 04) — faltava este override */
+  --field-radius: 0.875rem;      /* cantos dos inputs ~14px (escopo só ao campo, não ao --radius global) */
+  --field-background: var(--default); /* inputs preenchidos a cinza claro em vez do branco por defeito */
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f7f8fc;
-  color: #1f2937;
 }
 
 .app-container {

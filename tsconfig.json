@@ -14,5 +14,6 @@
     "resolveJsonModule": true,
     "moduleResolution": "bundler",
     "isolatedModules": true
-  }
+  },
+  "exclude": ["design-handoff"]
 }

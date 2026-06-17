@@ -1,105 +1,160 @@
 import React, { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Card,
-  FieldError,
-  Form,
-  Input,
-  Label,
-  Spinner,
-  TextField,
-  linkVariants,
-  toast,
-} from '@heroui/react';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Button, Checkbox, InputGroup, Link, Spinner, linkVariants } from '@heroui/react';
 import { ErrorCodes } from '../../../shared/errorCodes';
 import { ApiRequestError, login } from '../../lib/api';
 import { setToken } from '../../lib/auth';
 
 const ERROR_MESSAGES: Record<string, string> = {
   [ErrorCodes.Auth.INVALID_CREDENTIALS]: 'Email ou password incorretos.',
-  [ErrorCodes.Auth.USE_GOOGLE_LOGIN]:
-    'Esta conta foi criada com Google. Usa essa opção para entrar.',
+  [ErrorCodes.Auth.USE_GOOGLE_LOGIN]: 'Esta conta foi criada com Google. Usa essa opção para entrar.',
   [ErrorCodes.Auth.MISSING_FIELDS]: 'Preenche o email e a password.',
   [ErrorCodes.Auth.INVALID_EMAIL_FORMAT]: 'Formato de email inválido.',
 };
+
+const GoogleMark = () => (
+  <span
+    style={{
+      width: 18, height: 18, borderRadius: '50%', background: '#fff',
+      border: '1px solid #e4e4e7', color: '#4285F4', fontSize: 12, fontWeight: 700,
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      flexShrink: 0,
+    }}
+  >
+    G
+  </span>
+);
+
+const Logo = () => (
+  <div className="flex items-center justify-center gap-2 sm:justify-start">
+    <span className="h-[19px] w-[19px] rotate-45 rounded-md bg-accent" />
+    <span className="text-[15px] font-bold tracking-tight text-foreground">Tagus Score</span>
+  </div>
+);
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
+  const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
     setIsLoading(true);
-
     try {
       const { token } = await login(email, password);
       setToken(token);
       navigate('/dashboard');
-    } catch (error) {
+    } catch (err) {
       const message =
-        error instanceof ApiRequestError
-          ? ERROR_MESSAGES[error.errorCode ?? ''] ?? error.message
+        err instanceof ApiRequestError
+          ? ERROR_MESSAGES[err.errorCode ?? ''] ?? err.message
           : 'Não foi possível ligar ao servidor. Tenta novamente.';
-      toast.danger('Erro ao entrar', { description: message });
+      setError(message);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
-        <Card.Header>
-          <Card.Title>Entrar</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <Form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <TextField
-              name="email"
-              type="email"
-              value={email}
-              onChange={setEmail}
-              isRequired
+    <div className="flex min-h-screen flex-col bg-surface p-8 sm:bg-background sm:p-10">
+      <Logo />
+
+      <div className="flex flex-1 items-center justify-center">
+        <div className="w-full max-w-[360px] sm:rounded-[18px] sm:border sm:border-border sm:bg-surface sm:p-8 sm:shadow-sm">
+          <p className="text-center text-[13px] text-foreground/60 sm:text-left">Please enter your details</p>
+          <h2 className="mb-6 text-center text-[26px] font-bold tracking-[-0.02em] text-foreground sm:text-left">
+            Welcome back
+          </h2>
+
+          {error && <p className="mb-4 text-[13px] text-danger">{error}</p>}
+
+          <form className="flex flex-col gap-3.5" onSubmit={handleSubmit}>
+            <InputGroup variant="primary" fullWidth className="h-[50px]">
+              <InputGroup.Input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </InputGroup>
+
+            <InputGroup variant="primary" fullWidth className="h-[50px]">
+              <InputGroup.Input
+                type={show ? 'text' : 'password'}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+              <InputGroup.Suffix>
+                <button
+                  type="button"
+                  className="px-3 text-[13px] font-semibold text-accent"
+                  onClick={() => setShow((s) => !s)}
+                >
+                  {show ? 'Hide' : 'Show'}
+                </button>
+              </InputGroup.Suffix>
+            </InputGroup>
+
+            <div className="flex items-center justify-between gap-3">
+              <Checkbox isSelected={remember} onChange={setRemember} className="shrink-0">
+                <Checkbox.Control className="border border-border bg-surface">
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                <Checkbox.Content className="whitespace-nowrap text-[13px] text-foreground">
+                  Remember for 30 days
+                </Checkbox.Content>
+              </Checkbox>
+              <Link href="#" className="whitespace-nowrap text-[13px] font-semibold text-accent">
+                Forgot password
+              </Link>
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth
+              className="font-semibold"
               isDisabled={isLoading}
             >
-              <Label>Email</Label>
-              <Input placeholder="nome@exemplo.com" fullWidth />
-              <FieldError />
-            </TextField>
-
-            <TextField
-              name="password"
-              type="password"
-              value={password}
-              onChange={setPassword}
-              isRequired
-              isDisabled={isLoading}
-            >
-              <Label>Password</Label>
-              <Input fullWidth />
-              <FieldError />
-            </TextField>
-
-            <Button type="submit" variant="primary" fullWidth isDisabled={isLoading}>
-              {isLoading ? <Spinner size="sm" /> : 'Entrar'}
+              {isLoading ? <Spinner size="sm" /> : 'Sign in'}
             </Button>
-          </Form>
-        </Card.Content>
-        <Card.Footer className="flex flex-col gap-2 text-sm">
-          <RouterLink to="/signup" className={linkVariants().base()}>
-            Criar conta
-          </RouterLink>
-          <span
-            className={`${linkVariants().base()} cursor-not-allowed opacity-50`}
-            title="Em breve"
-          >
-            Esqueci a password
-          </span>
-        </Card.Footer>
-      </Card>
+
+            <div className="my-1.5 flex items-center gap-3">
+              <span className="h-px flex-1 bg-border" />
+              <span className="text-[11px] font-semibold tracking-wider text-foreground/55">OR</span>
+              <span className="h-px flex-1 bg-border" />
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              fullWidth
+              className="flex items-center justify-center gap-2 font-medium text-foreground"
+            >
+              <GoogleMark /> Continue with Google
+            </Button>
+          </form>
+
+          <p className="mt-5 text-center text-[13px] text-foreground/60">
+            Don&apos;t have an account?{' '}
+            <RouterLink to="/signup" className={`${linkVariants().base()} text-[13px] font-semibold text-accent`}>
+              Sign up
+            </RouterLink>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
