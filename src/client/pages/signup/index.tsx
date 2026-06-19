@@ -1,17 +1,165 @@
-import React from 'react';
-import { Card } from '@heroui/react';
+import React, { useMemo, useState } from 'react';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Button, Spinner, linkVariants } from '@heroui/react';
+import { ErrorCodes } from '../../../shared/errorCodes';
+import { ApiRequestError, signup } from '../../lib/api';
+import { setToken } from '../../lib/auth';
+import InputText from '../../components/input-text';
+import InputPassword from '../../components/input-password';
+import Logo from '../../components/logo';
+
+const ERROR_MESSAGES: Record<string, string> = {
+  [ErrorCodes.Auth.MISSING_FIELDS]: 'Preenche todos os campos.',
+  [ErrorCodes.Auth.INVALID_EMAIL_FORMAT]: 'Formato de email inválido.',
+  [ErrorCodes.Auth.PASSWORD_TOO_SHORT]: 'A password deve ter pelo menos 8 caracteres.',
+  [ErrorCodes.Auth.EMAIL_ALREADY_EXISTS]: 'Já existe uma conta com este email.',
+};
+
+// Simple Google "G" mark for the button
+// TODO: Replace with actual Google logo if possible, ensuring to follow Google's branding guidelines
+const GoogleMark = () => (
+  <span
+    style={{
+      width: 18, height: 18, borderRadius: '50%', background: '#fff',
+      border: '1px solid #e4e4e7', color: '#4285F4', fontSize: 12, fontWeight: 700,
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      flexShrink: 0,
+    }}
+  >
+    G
+  </span>
+);
 
 const Signup: React.FC = () => {
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const mismatch = confirm.length > 0 && confirm !== password;
+  const matched = confirm.length > 0 && confirm === password;
+  const canSubmit = useMemo(
+    () => Boolean(name && email && password && matched),
+    [name, email, password, matched],
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+    setError('');
+    setIsLoading(true);
+    try {
+      const { token } = await signup(name, email, password);
+      setToken(token);
+      navigate('/dashboard');
+    } catch (err) {
+      const message =
+        err instanceof ApiRequestError
+          ? ERROR_MESSAGES[err.errorCode ?? ''] ?? err.message
+          : 'Não foi possível ligar ao servidor. Tenta novamente.';
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
-        <Card.Header>
-          <Card.Title>Criar conta</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <p>Em construção.</p>
-        </Card.Content>
-      </Card>
+    <div className="flex min-h-screen flex-col bg-surface p-8 sm:bg-background sm:p-10">
+      <div className="flex justify-center sm:justify-start">
+        <Logo />
+      </div>
+
+      <div className="flex flex-1 items-center justify-center">
+        <div className="w-full max-w-[360px] sm:rounded-[18px] sm:border sm:border-border sm:bg-surface sm:p-8 sm:shadow-sm">
+          <p className="text-center text-[13px] text-foreground/60 sm:text-left">Get started</p>
+          <h2 className="mb-6 text-center text-[26px] font-bold tracking-[-0.02em] text-foreground sm:text-left">
+            Create your account
+          </h2>
+
+          {error && <p className="mb-4 text-[13px] text-danger">{error}</p>}
+
+          <form className="flex flex-col gap-3.5" onSubmit={handleSubmit}>
+            <InputText
+              type="text"
+              placeholder="Full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              disabled={isLoading}
+            />
+
+            <InputText
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={isLoading}
+            />
+
+            <InputPassword
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={isLoading}
+            />
+
+            <InputPassword
+              placeholder="Confirm password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              required
+              disabled={isLoading}
+              invalid={mismatch}
+              hint={
+                mismatch
+                  ? { type: 'error', message: "Passwords don't match" }
+                  : matched
+                    ? { type: 'success', message: '✓ Passwords match' }
+                    : undefined
+              }
+            />
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth
+              className="font-semibold"
+              isDisabled={!canSubmit || isLoading}
+            >
+              {isLoading ? <Spinner size="sm" /> : 'Create account'}
+            </Button>
+
+            <div className="my-1.5 flex items-center gap-3">
+              <span className="h-px flex-1 bg-border" />
+              <span className="text-[11px] font-semibold tracking-wider text-foreground/55">OR</span>
+              <span className="h-px flex-1 bg-border" />
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              fullWidth
+              className="flex items-center justify-center gap-2 font-medium text-foreground"
+            >
+              <GoogleMark /> Continue with Google
+            </Button>
+          </form>
+
+          <p className="mt-5 text-center text-[13px] text-foreground/60">
+            Already have an account?{' '}
+            <RouterLink to="/login" className={`${linkVariants().base()} text-[13px] font-semibold text-accent`}>
+              Sign in
+            </RouterLink>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

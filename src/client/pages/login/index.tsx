@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Button, Checkbox, InputGroup, Link, Spinner, linkVariants } from '@heroui/react';
+import { Button, Checkbox, Link, Spinner, linkVariants } from '@heroui/react';
 import { ErrorCodes } from '../../../shared/errorCodes';
 import { ApiRequestError, login } from '../../lib/api';
 import { setToken } from '../../lib/auth';
+import InputText from '../../components/input-text';
+import InputPassword from '../../components/input-password';
+import Logo from '../../components/logo';
 
 const ERROR_MESSAGES: Record<string, string> = {
   [ErrorCodes.Auth.INVALID_CREDENTIALS]: 'Email ou password incorretos.',
@@ -27,19 +30,11 @@ const GoogleMark = () => (
   </span>
 );
 
-const Logo = () => (
-  <div className="flex items-center justify-center gap-2 sm:justify-start">
-    <span className="h-[19px] w-[19px] rotate-45 rounded-md bg-accent" />
-    <span className="text-[15px] font-bold tracking-tight text-foreground">Tagus Score</span>
-  </div>
-);
-
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
-  const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -64,7 +59,9 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-surface p-8 sm:bg-background sm:p-10">
-      <Logo />
+      <div className="flex justify-center sm:justify-start">
+        <Logo />
+      </div>
 
       <div className="flex flex-1 items-center justify-center">
         <div className="w-full max-w-[360px] sm:rounded-[18px] sm:border sm:border-border sm:bg-surface sm:p-8 sm:shadow-sm">
@@ -76,36 +73,22 @@ const Login: React.FC = () => {
           {error && <p className="mb-4 text-[13px] text-danger">{error}</p>}
 
           <form className="flex flex-col gap-3.5" onSubmit={handleSubmit}>
-            <InputGroup variant="primary" fullWidth className="h-[50px]">
-              <InputGroup.Input
-                type="email"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-            </InputGroup>
+            <InputText
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={isLoading}
+            />
 
-            <InputGroup variant="primary" fullWidth className="h-[50px]">
-              <InputGroup.Input
-                type={show ? 'text' : 'password'}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-              <InputGroup.Suffix>
-                <button
-                  type="button"
-                  className="px-3 text-[13px] font-semibold text-accent"
-                  onClick={() => setShow((s) => !s)}
-                >
-                  {show ? 'Hide' : 'Show'}
-                </button>
-              </InputGroup.Suffix>
-            </InputGroup>
+            <InputPassword
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={isLoading}
+            />
 
             <div className="flex items-center justify-between gap-3">
               <Checkbox isSelected={remember} onChange={setRemember} className="shrink-0">

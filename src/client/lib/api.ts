@@ -28,3 +28,19 @@ export async function login(email: string, password: string): Promise<AuthRespon
 
   return data as AuthResponse;
 }
+
+export async function signup(name: string, email: string, password: string): Promise<AuthResponse> {
+  const res = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new ApiRequestError(data.error ?? 'Erro ao criar conta', data.errorCode);
+  }
+
+  return data as AuthResponse;
+}
