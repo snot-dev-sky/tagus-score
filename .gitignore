@@ -29,3 +29,6 @@ yarn-error.log*
 # Cache
 .eslintcache
 .cache/
+
+# Design handoffs (local only, not compiled)
+design-handoff/

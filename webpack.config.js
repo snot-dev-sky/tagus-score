@@ -13,7 +13,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /design-handoff/],
       },
       {
         test: /\.css$/,
@@ -30,6 +30,12 @@ module.exports = {
     hot: true,
     historyApiFallback: true,
     watchFiles: ['src/client/**/*'],
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'http://localhost:5000',
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({

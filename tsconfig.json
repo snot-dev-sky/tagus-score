@@ -4,7 +4,6 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -15,5 +14,6 @@
     "resolveJsonModule": true,
     "moduleResolution": "bundler",
     "isolatedModules": true
-  }
+  },
+  "exclude": ["design-handoff"]
 }
