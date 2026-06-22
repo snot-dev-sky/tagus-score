@@ -20,6 +20,16 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'postcss-loader'],
         exclude: /node_modules/,
       },
+      {
+        // Vendor CSS (ex.: @fontsource/inter) — sem tailwind/postcss.
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+        include: /node_modules/,
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
     ],
   },
   resolve: {

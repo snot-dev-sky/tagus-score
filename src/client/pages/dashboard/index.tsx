@@ -1,19 +1,15 @@
 import React from 'react';
-import { Card } from '@heroui/react';
+import MainLayout from '../../components/main-layout';
+import MainContent from '../../components/main-content';
+import Dashboard from '../../components/dashboard';
 
-const Dashboard: React.FC = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
-        <Card.Header>
-          <Card.Title>Dashboard</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <p>Em construção.</p>
-        </Card.Content>
-      </Card>
-    </div>
-  );
-};
+// Rota /dashboard — compõe o layout da app autenticada.
+const DashboardPage: React.FC = () => (
+  <MainLayout>
+    <MainContent>
+      <Dashboard />
+    </MainContent>
+  </MainLayout>
+);
 
-export default Dashboard;
+export default DashboardPage;

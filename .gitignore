@@ -30,5 +30,6 @@ yarn-error.log*
 .eslintcache
 .cache/
 
-# Design handoffs (local only, not compiled)
-design-handoff/
+# Design handoffs (keep folder tracked, ignore its contents)
+design-handoff/*
+!design-handoff/.gitkeep

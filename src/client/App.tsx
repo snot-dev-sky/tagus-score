@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LeadForm from './pages/lead-form';
 import Login from './pages/login';
 import Signup from './pages/signup';
@@ -13,22 +13,14 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="*"
           element={
             <div className="app-container bg-background text-foreground">
               <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <>
-                      <h1>Welcome to Tagus Score</h1>
-                      <p>React + Express + TypeScript Boilerplate</p>
-                    </>
-                  }
-                />
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/lead-form" element={<LeadForm />} />
-                <Route path="/dashboard" element={<Dashboard />} />
               </Routes>
             </div>
           }

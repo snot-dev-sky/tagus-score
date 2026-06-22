@@ -9,13 +9,9 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-.app-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 32px;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1 {

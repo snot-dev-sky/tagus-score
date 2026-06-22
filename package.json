@@ -17,6 +17,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
     "@heroui/react": "^3.0.3",
     "@heroui/styles": "^3.0.3",
     "bcrypt": "^6.0.0",
