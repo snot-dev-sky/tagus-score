@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { Button, Checkbox, Link, Spinner, linkVariants } from '@heroui/react';
-import { ErrorCodes } from '../../../shared/errorCodes';
+import { ErrorCodes } from '../../constants/errorCodes';
 import { ApiRequestError, login } from '../../lib/api';
 import { setToken } from '../../lib/auth';
 import InputText from '../../components/input-text';

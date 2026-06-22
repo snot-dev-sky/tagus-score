@@ -1,5 +1,6 @@
 export interface Lead {
   id: string;
+  agentId: string;
   formId: string;
   name: string;
   email: string;
@@ -10,4 +11,5 @@ export interface Lead {
   town: string;
   type: string[];
   notes: string;
+  createdAt: string;
 }

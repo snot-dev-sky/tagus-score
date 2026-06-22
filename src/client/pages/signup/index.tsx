@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { Button, Spinner, linkVariants } from '@heroui/react';
-import { ErrorCodes } from '../../../shared/errorCodes';
+import { ErrorCodes } from '../../constants/errorCodes';
 import { ApiRequestError, signup } from '../../lib/api';
 import { setToken } from '../../lib/auth';
 import InputText from '../../components/input-text';
