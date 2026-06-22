@@ -40,17 +40,17 @@ VALUES (:'agent_id', gen_random_uuid(), 'submitted', NOW() + INTERVAL '10 days')
 RETURNING id AS form5_id \gset
 
 -- Leads
-INSERT INTO leads (agent_id, form_id, name, email, budget, area, property_type, urgency, score, created_at)
-VALUES (:'agent_id', :'form1_id', 'Maria Santos', 'maria.santos@example.com', 250000, ARRAY['Lisboa', 'Cascais'], 'apartment', 'high', 85, NOW() - INTERVAL '2 days');
+INSERT INTO leads (agent_id, form_id, name, email, contact, budget, approved, district, town, type, notes)
+VALUES (:'agent_id', :'form1_id', 'Maria Santos', 'maria.santos@example.com', '912345678', 250000, true, 'Lisboa', 'Cascais', ARRAY['t1', 't2', 'apartment'], 'Cliente com urgência, perto do centro comercial');
 
-INSERT INTO leads (agent_id, form_id, name, email, budget, area, property_type, urgency, score, created_at)
-VALUES (:'agent_id', :'form2_id', 'Pedro Costa', 'pedro.costa@example.com', 450000, ARRAY['Sintra', 'Oeiras'], 'house', 'medium', 65, NOW() - INTERVAL '4 days');
+INSERT INTO leads (agent_id, form_id, name, email, contact, budget, approved, district, town, type, notes)
+VALUES (:'agent_id', :'form2_id', 'Pedro Costa', 'pedro.costa@example.com', '923456789', 450000, true, 'Lisboa', 'Oeiras', ARRAY['t2', 't3', 'moradia'], 'Interessado em morada com espaço exterior');
 
-INSERT INTO leads (agent_id, form_id, name, email, budget, area, property_type, urgency, score, created_at)
-VALUES (:'agent_id', :'form3_id', 'Ana Ferreira', 'ana.ferreira@example.com', 180000, ARRAY['Lisboa'], 'apartment', 'low', 40, NOW() - INTERVAL '6 days');
+INSERT INTO leads (agent_id, form_id, name, email, contact, budget, approved, district, town, type, notes)
+VALUES (:'agent_id', :'form3_id', 'Ana Ferreira', 'ana.ferreira@example.com', '934567890', 180000, false, 'Porto', 'Porto', ARRAY['t0', 't1'], 'Procura apartamento pequeno, orçamento reduzido');
 
-INSERT INTO leads (agent_id, form_id, name, email, budget, area, property_type, urgency, score, created_at)
-VALUES (:'agent_id', :'form4_id', 'Rui Oliveira', 'rui.oliveira@example.com', 600000, ARRAY['Mafra', 'Sintra'], 'land', 'high', 92, NOW() - INTERVAL '1 days');
+INSERT INTO leads (agent_id, form_id, name, email, contact, budget, approved, district, town, type, notes)
+VALUES (:'agent_id', :'form4_id', 'Rui Oliveira', 'rui.oliveira@example.com', '945678901', 600000, true, 'Lisboa', 'Sintra', ARRAY['t3', 't4', 'moradia'], 'Cliente VIP, comprador seguro, perto de zona verde');
 
-INSERT INTO leads (agent_id, form_id, name, email, budget, area, property_type, urgency, score, created_at)
-VALUES (:'agent_id', :'form5_id', 'Tiago Pereira', 'tiago.pereira@example.com', 800000, ARRAY['Almada', 'Seixal'], 'commercial', 'medium', 70, NOW() - INTERVAL '8 days');
+INSERT INTO leads (agent_id, form_id, name, email, contact, budget, approved, district, town, type, notes)
+VALUES (:'agent_id', :'form5_id', 'Tiago Pereira', 'tiago.pereira@example.com', '956789012', 800000, false, 'Setúbal', 'Almada', ARRAY['t3_plus', 'moradia'], 'Procura propriedade grande, negociável no preço');
