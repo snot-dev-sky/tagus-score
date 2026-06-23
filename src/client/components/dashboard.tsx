@@ -16,6 +16,7 @@ interface DashboardProps {
   selected: Lead | null;
   onSelectLead: (lead: Lead) => void;
   onCloseModal: () => void;
+  onNewLead: () => void;
 }
 
 // Vista do dashboard de Leads: cabeçalho (título + pesquisa + nova lead), tabela e modal.
@@ -31,6 +32,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   selected,
   onSelectLead,
   onCloseModal,
+  onNewLead,
 }) => (
   <>
     <div className="flex flex-wrap items-end justify-between gap-4">
@@ -47,7 +49,9 @@ const Dashboard: React.FC<DashboardProps> = ({
           placeholder="Pesquisar leads"
           containerClassName="w-56"
         />
-        <Button className="bg-accent font-semibold text-white hover:brightness-95">+ Nova lead</Button>
+        <Button onPress={onNewLead} className="bg-accent font-semibold text-white hover:brightness-95">
+          + Nova lead
+        </Button>
       </div>
     </div>
 

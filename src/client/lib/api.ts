@@ -64,6 +64,29 @@ export async function getLeads(
   return { leads: data.data as ApiLead[], total: data.pagination.total as number };
 }
 
+export interface CreatedForm {
+  formId: string;
+  link: string;
+  expiresAt: string;
+  message: string;
+}
+
+// Gera um novo formulário de lead para o agente autenticado.
+export async function createForm(): Promise<CreatedForm> {
+  const res = await fetch('/api/agents/me/forms', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${getToken() ?? ''}` },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new ApiRequestError(data.error ?? 'Erro ao gerar o formulário', data.errorCode);
+  }
+
+  return data as CreatedForm;
+}
+
 export interface ApiForm {
   formId: string;
   status: 'pending' | 'submitted';

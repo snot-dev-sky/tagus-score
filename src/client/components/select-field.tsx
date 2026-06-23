@@ -34,9 +34,9 @@ const Options: React.FC<{ options: string[] }> = ({ options }) => (
   </Select.Popover>
 );
 
-const Trigger: React.FC = () => (
+const Trigger: React.FC<{ value?: React.ReactNode }> = ({ value }) => (
   <Select.Trigger className="h-[50px] w-full">
-    <Select.Value />
+    {value ?? <Select.Value />}
     <Select.Indicator />
   </Select.Trigger>
 );
@@ -55,7 +55,14 @@ const SelectField: React.FC<SelectFieldProps> = (props) => {
         value={value}
         onChange={(keys) => onChange(keys as string[])}
       >
-        <Trigger />
+        {/* Junta as seleções com ',' em vez do "and" do formatador por defeito. */}
+        <Trigger
+          value={
+            <Select.Value>
+              {({ isPlaceholder }) => (isPlaceholder ? placeholder : value.join(', '))}
+            </Select.Value>
+          }
+        />
         <Options options={options} />
       </Select>
     );

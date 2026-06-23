@@ -49,7 +49,7 @@ const LeadModal: React.FC<LeadModalProps> = ({ lead, onClose }) => {
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg bg-default text-default-foreground hover:text-foreground"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg bg-default text-default-foreground hover:text-foreground"
           >
             ✕
           </button>

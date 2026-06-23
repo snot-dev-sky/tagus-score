@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import MainLayout from '../../components/main-layout';
 import MainContent from '../../components/main-content';
 import Dashboard from '../../components/dashboard';
+import ShareFormModal from '../../components/share-form-modal';
 import { formatDate, type Lead } from '../../components/lead';
-import { getLeads, type ApiLead } from '../../lib/api';
+import { getLeads, createForm, type ApiLead } from '../../lib/api';
 
 // Score ainda não existe no modelo de dados — valor random inserido no carregamento.
 // Por agora é o mesmo para todas as linhas.
@@ -32,6 +33,14 @@ const DashboardPage: React.FC = () => {
   const [error, setError] = useState('');
   const [selected, setSelected] = useState<Lead | null>(null);
 
+  // Modal de partilha do formulário (gerar link + copiar).
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareLink, setShareLink] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [shareError, setShareError] = useState('');
+  const [copied, setCopied] = useState(false);
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
   useEffect(() => {
     let active = true;
     (async () => {
@@ -48,6 +57,46 @@ const DashboardPage: React.FC = () => {
       active = false;
     };
   }, []);
+
+  useEffect(() => () => clearTimeout(copyTimer.current), []);
+
+  // Abre a modal e gera um novo formulário; o link público é construído a partir do formId.
+  const handleNewLead = async () => {
+    setShareOpen(true);
+    setCopied(false);
+    setShareError('');
+    setShareLink('');
+    setIsGenerating(true);
+    try {
+      const { formId } = await createForm();
+      setShareLink(`${window.location.origin}/form/${formId}`);
+    } catch {
+      setShareError('Não foi possível gerar o link. Tenta novamente.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleCopy = async () => {
+    if (!shareLink) return;
+    try {
+      await navigator.clipboard.writeText(shareLink);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = shareLink;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+      } catch {
+        /* ignora — clipboard indisponível */
+      }
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    clearTimeout(copyTimer.current);
+    copyTimer.current = setTimeout(() => setCopied(false), 1800);
+  };
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -72,6 +121,16 @@ const DashboardPage: React.FC = () => {
           selected={selected}
           onSelectLead={setSelected}
           onCloseModal={() => setSelected(null)}
+          onNewLead={handleNewLead}
+        />
+        <ShareFormModal
+          isOpen={shareOpen}
+          link={shareLink}
+          isGenerating={isGenerating}
+          copied={copied}
+          error={shareError}
+          onCopy={handleCopy}
+          onClose={() => setShareOpen(false)}
         />
       </MainContent>
     </MainLayout>
