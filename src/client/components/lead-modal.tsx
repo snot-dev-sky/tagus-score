@@ -43,6 +43,7 @@ const LeadModal: React.FC<LeadModalProps> = ({ lead, onClose }) => {
           <ScoreCircle score={lead.score} size={52} />
           <div className="min-w-0 flex-1">
             <h2 className="text-[20px] font-bold tracking-tight text-foreground">{lead.name}</h2>
+            {lead.contact && <p className="mt-0.5 text-[13px] font-medium text-foreground">{lead.contact}</p>}
             <p className="mt-0.5 text-[13px] text-default-foreground">{lead.email}</p>
           </div>
           <button

@@ -5,9 +5,10 @@ export interface Lead {
   id: string;
   name: string;
   email: string;
+  contact: string; // telefone / contacto
   score: number; // 0–100 (random por agora)
   budget: number; // em euros
-  local: string; // concelho
+  local: string; // "distrito, concelho" (ex.: "Lisboa, Cascais")
   added: string; // data já formatada (ex.: "18 Jun 2026")
   tipologia: string; // T0/T1/T2/T3/Moradia
   credito: 'Sim' | 'Não';

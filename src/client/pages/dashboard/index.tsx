@@ -1,15 +1,81 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import MainLayout from '../../components/main-layout';
 import MainContent from '../../components/main-content';
 import Dashboard from '../../components/dashboard';
+import { formatDate, type Lead } from '../../components/lead';
+import { getLeads, type ApiLead } from '../../lib/api';
 
-// Rota /dashboard — compõe o layout da app autenticada.
-const DashboardPage: React.FC = () => (
-  <MainLayout>
-    <MainContent>
-      <Dashboard />
-    </MainContent>
-  </MainLayout>
-);
+// Score ainda não existe no modelo de dados — valor random inserido no carregamento.
+// Por agora é o mesmo para todas as linhas.
+const RANDOM_SCORE = Math.floor(Math.random() * 101);
+
+// Converte o lead vindo do servidor para o tipo usado pela UI.
+const toLead = (l: ApiLead): Lead => ({
+  id: l.id,
+  name: l.name,
+  email: l.email,
+  contact: l.contact,
+  score: RANDOM_SCORE,
+  budget: l.budget,
+  local: [l.district, l.town].filter(Boolean).join(', '),
+  added: formatDate(l.createdAt),
+  tipologia: l.type.join(', ') || '—',
+  credito: l.approved ? 'Sim' : 'Não',
+  extras: l.notes || '—',
+});
+
+// Rota /dashboard — detém todo o estado/lógica e compõe o layout da app autenticada.
+const DashboardPage: React.FC = () => {
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [selected, setSelected] = useState<Lead | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const { leads: data } = await getLeads(100, 0);
+        if (active) setLeads(data.map(toLead));
+      } catch {
+        if (active) setError('Não foi possível carregar as leads.');
+      } finally {
+        if (active) setIsLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const rows = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return q
+      ? leads.filter((l) => (l.name + ' ' + l.email + ' ' + l.local).toLowerCase().includes(q))
+      : leads;
+  }, [query, leads]);
+
+  const highScore = leads.filter((l) => l.score >= 80).length;
+
+  return (
+    <MainLayout>
+      <MainContent>
+        <Dashboard
+          rows={rows}
+          total={leads.length}
+          highScore={highScore}
+          query={query}
+          onQueryChange={setQuery}
+          isLoading={isLoading}
+          error={error}
+          selected={selected}
+          onSelectLead={setSelected}
+          onCloseModal={() => setSelected(null)}
+        />
+      </MainContent>
+    </MainLayout>
+  );
+};
 
 export default DashboardPage;
