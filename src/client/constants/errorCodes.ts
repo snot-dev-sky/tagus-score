@@ -18,6 +18,21 @@ export const ErrorCodes = {
     NO_TOKEN: 'ERR_00107',
     INVALID_TOKEN: 'ERR_00108',
   },
+  // 002 - Form (public form submission / validation)
+  Form: {
+    NOT_FOUND: 'ERR_00201',
+    EXPIRED: 'ERR_00202',
+    ALREADY_USED: 'ERR_00203',
+    MISSING_FIELDS: 'ERR_00204',
+    INVALID_EMAIL: 'ERR_00205',
+    INVALID_CONTACT: 'ERR_00206',
+    INVALID_BUDGET: 'ERR_00207',
+    INVALID_DISTRICT: 'ERR_00208',
+    INVALID_TYPE: 'ERR_00209',
+    RATE_LIMITED: 'ERR_00210',
+    SUBMIT_FAILED: 'ERR_00211',
+    LOOKUP_FAILED: 'ERR_00212',
+  },
   // 004 - Lead
   Lead: {
     FETCH_FAILED: 'ERR_00401',

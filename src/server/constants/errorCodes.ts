@@ -31,6 +31,7 @@ export const ErrorCodes = {
     INVALID_TYPE: 'ERR_00209',
     RATE_LIMITED: 'ERR_00210',
     SUBMIT_FAILED: 'ERR_00211',
+    LOOKUP_FAILED: 'ERR_00212',
   },
   // 004 - Lead
   Lead: {

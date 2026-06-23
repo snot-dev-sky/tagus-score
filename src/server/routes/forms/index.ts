@@ -12,9 +12,50 @@ import {
   validateDistrict,
   validateLeadType,
   isNonEmptyString,
+  isValidUuid,
 } from '../../utils';
 
 const router = Router();
+
+// Public endpoint: the public form page validates the link before rendering.
+// Mirrors the guards in POST /:formId/submit (not found / expired / already used).
+router.get('/:formId', async (req: Request, res: Response) => {
+  const { formId } = req.params;
+
+  if (!isValidUuid(formId)) {
+    return res.status(404).json({ error: 'Form not found', errorCode: ErrorCodes.Form.NOT_FOUND });
+  }
+
+  try {
+    const form = await findAgentFormByFormId(formId);
+
+    if (!form) {
+      return res
+        .status(404)
+        .json({ error: 'Form not found', errorCode: ErrorCodes.Form.NOT_FOUND });
+    }
+
+    if (new Date(form.expiresAt).getTime() < Date.now()) {
+      return res.status(410).json({ error: 'Form expired', errorCode: ErrorCodes.Form.EXPIRED });
+    }
+
+    if (form.status !== 'pending') {
+      return res
+        .status(400)
+        .json({ error: 'Form already used', errorCode: ErrorCodes.Form.ALREADY_USED });
+    }
+
+    return res.status(200).json({
+      formId: form.formId,
+      status: form.status,
+      expiresAt: form.expiresAt,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: (error as Error).message, errorCode: ErrorCodes.Form.LOOKUP_FAILED });
+  }
+});
 
 interface SubmitFormBody {
   name?: string;

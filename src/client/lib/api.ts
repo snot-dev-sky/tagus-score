@@ -64,6 +64,26 @@ export async function getLeads(
   return { leads: data.data as ApiLead[], total: data.pagination.total as number };
 }
 
+export interface ApiForm {
+  formId: string;
+  status: 'pending' | 'submitted';
+  expiresAt: string;
+}
+
+// Valida um link de formulário público. Lança ApiRequestError (com errorCode)
+// se for inválido / expirado / já submetido.
+export async function getForm(formId: string): Promise<ApiForm> {
+  const res = await fetch(`/api/forms/${formId}`);
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new ApiRequestError(data.error ?? 'Formulário inválido', data.errorCode);
+  }
+
+  return data as ApiForm;
+}
+
 export async function signup(name: string, email: string, password: string): Promise<AuthResponse> {
   const res = await fetch('/api/auth/signup', {
     method: 'POST',
