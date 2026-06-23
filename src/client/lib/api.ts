@@ -84,6 +84,44 @@ export async function getForm(formId: string): Promise<ApiForm> {
   return data as ApiForm;
 }
 
+export interface SubmitFormPayload {
+  name: string;
+  email: string;
+  contact: string;
+  budget: number;
+  approved: boolean;
+  district: string;
+  town: string;
+  type: string[];
+  notes: string;
+}
+
+export interface SubmitFormResponse {
+  leadId: string;
+  message: string;
+}
+
+// Submete uma lead num formulário público. Lança ApiRequestError (com errorCode)
+// se o link for inválido/expirado/usado ou se a validação falhar.
+export async function submitForm(
+  formId: string,
+  payload: SubmitFormPayload,
+): Promise<SubmitFormResponse> {
+  const res = await fetch(`/api/forms/${formId}/submit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new ApiRequestError(data.error ?? 'Erro ao submeter o formulário', data.errorCode);
+  }
+
+  return data as SubmitFormResponse;
+}
+
 export async function signup(name: string, email: string, password: string): Promise<AuthResponse> {
   const res = await fetch('/api/auth/signup', {
     method: 'POST',

@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LeadForm from './pages/lead-form';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import Dashboard from './pages/dashboard';
@@ -22,7 +21,6 @@ const App: React.FC = () => {
             <div className="app-container bg-background text-foreground">
               <Routes>
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/lead-form" element={<LeadForm />} />
               </Routes>
             </div>
           }
