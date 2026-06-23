@@ -18,3 +18,19 @@ export async function createAgentForm(
   );
   return rows[0];
 }
+
+export async function findAgentFormByFormId(
+  formId: string,
+  executor?: Queryable,
+): Promise<AgentForm | null> {
+  const { rows } = await query<AgentForm>(
+    `SELECT ${AGENT_FORM_COLUMNS} FROM agent_forms WHERE form_id = $1`,
+    [formId],
+    executor,
+  );
+  return rows[0] ?? null;
+}
+
+export async function markAgentFormSubmitted(id: string, executor?: Queryable): Promise<void> {
+  await query(`UPDATE agent_forms SET status = 'submitted' WHERE id = $1`, [id], executor);
+}
