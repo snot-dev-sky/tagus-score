@@ -6,6 +6,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist/client'),
     filename: 'bundle.js',
+    // Absoluto para o <script>/assets resolverem em rotas com vários segmentos
+    // (ex.: /form/:formId), não relativo ao path atual.
+    publicPath: '/',
     clean: true,
   },
   module: {

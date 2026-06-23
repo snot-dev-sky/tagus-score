@@ -4,6 +4,7 @@ import LeadForm from './pages/lead-form';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import Dashboard from './pages/dashboard';
+import PublicForm from './pages/public-form';
 import { Toast } from '@heroui/react';
 import './styles/global.css';
 
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/form/:formId" element={<PublicForm />} />
         <Route
           path="*"
           element={
