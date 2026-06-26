@@ -5,6 +5,7 @@ interface BaseProps {
   options: string[];
   placeholder: string;
   isDisabled?: boolean;
+  isInvalid?: boolean;
   'aria-label': string;
 }
 
@@ -28,14 +29,20 @@ const Options: React.FC<{ options: string[] }> = ({ options }) => (
       {options.map((option) => (
         <ListBox.Item key={option} id={option} textValue={option}>
           {option}
+          {/* Visto que aparece nas opções selecionadas com a dropdown aberta. */}
+          <ListBox.Item.Indicator />
         </ListBox.Item>
       ))}
     </ListBox>
   </Select.Popover>
 );
 
-const Trigger: React.FC<{ value?: React.ReactNode }> = ({ value }) => (
-  <Select.Trigger className="h-[50px] w-full">
+const Trigger: React.FC<{ value?: React.ReactNode; isInvalid?: boolean }> = ({ value, isInvalid }) => (
+  // Outline vermelho no estado de erro, a condizer com o dos inputs.
+  <Select.Trigger
+    className="h-[50px] w-full"
+    style={isInvalid ? { outline: '1px solid var(--danger)' } : undefined}
+  >
     {value ?? <Select.Value />}
     <Select.Indicator />
   </Select.Trigger>
@@ -44,7 +51,7 @@ const Trigger: React.FC<{ value?: React.ReactNode }> = ({ value }) => (
 // Wrapper presentational sobre o Select v3 (single ou multi-seleção).
 const SelectField: React.FC<SelectFieldProps> = (props) => {
   if (props.multiple) {
-    const { options, placeholder, isDisabled, value, onChange } = props;
+    const { options, placeholder, isDisabled, isInvalid, value, onChange } = props;
     return (
       <Select
         fullWidth
@@ -57,6 +64,7 @@ const SelectField: React.FC<SelectFieldProps> = (props) => {
       >
         {/* Junta as seleções com ',' em vez do "and" do formatador por defeito. */}
         <Trigger
+          isInvalid={isInvalid}
           value={
             <Select.Value>
               {({ isPlaceholder }) => (isPlaceholder ? placeholder : value.join(', '))}
@@ -68,7 +76,7 @@ const SelectField: React.FC<SelectFieldProps> = (props) => {
     );
   }
 
-  const { options, placeholder, isDisabled, value, onChange } = props;
+  const { options, placeholder, isDisabled, isInvalid, value, onChange } = props;
   return (
     <Select
       fullWidth
@@ -78,7 +86,7 @@ const SelectField: React.FC<SelectFieldProps> = (props) => {
       value={value || null}
       onChange={(key) => onChange((key as string) ?? '')}
     >
-      <Trigger />
+      <Trigger isInvalid={isInvalid} />
       <Options options={options} />
     </Select>
   );

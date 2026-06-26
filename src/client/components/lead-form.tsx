@@ -23,6 +23,8 @@ export interface LeadFormValues {
 
 interface LeadFormProps {
   values: LeadFormValues;
+  // Campos assinalados com erro após a validação (border vermelho).
+  errors: Partial<Record<keyof LeadFormValues, boolean>>;
   onChange: <K extends keyof LeadFormValues>(key: K, value: LeadFormValues[K]) => void;
   districts: string[];
   concelhos: string[];
@@ -37,6 +39,7 @@ interface LeadFormProps {
 // Formulário de lead (presentational): consome valores + handlers do componente pai.
 const LeadForm: React.FC<LeadFormProps> = ({
   values,
+  errors,
   onChange,
   districts,
   concelhos,
@@ -59,6 +62,7 @@ const LeadForm: React.FC<LeadFormProps> = ({
           value={values.name}
           onChange={(e) => onChange('name', e.target.value)}
           disabled={isSubmitting}
+          invalid={errors.name}
         />
       </Field>
 
@@ -70,6 +74,7 @@ const LeadForm: React.FC<LeadFormProps> = ({
             value={values.email}
             onChange={(e) => onChange('email', e.target.value)}
             disabled={isSubmitting}
+            invalid={errors.email}
           />
         </Field>
         <Field label="Contacto">
@@ -79,6 +84,7 @@ const LeadForm: React.FC<LeadFormProps> = ({
             value={values.contact}
             onChange={(e) => onChange('contact', e.target.value)}
             disabled={isSubmitting}
+            invalid={errors.contact}
           />
         </Field>
       </div>
@@ -120,6 +126,7 @@ const LeadForm: React.FC<LeadFormProps> = ({
             value={values.district}
             onChange={(v) => onChange('district', v)}
             isDisabled={isSubmitting}
+            isInvalid={errors.district}
           />
         </Field>
         <Field label="Concelho">
@@ -130,6 +137,7 @@ const LeadForm: React.FC<LeadFormProps> = ({
             value={values.town}
             onChange={(v) => onChange('town', v)}
             isDisabled={isSubmitting || !values.district}
+            isInvalid={errors.town}
           />
         </Field>
       </div>
@@ -143,6 +151,7 @@ const LeadForm: React.FC<LeadFormProps> = ({
           value={values.type}
           onChange={(v) => onChange('type', v)}
           isDisabled={isSubmitting}
+          isInvalid={errors.type}
         />
       </Field>
 

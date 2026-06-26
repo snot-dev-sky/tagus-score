@@ -48,6 +48,40 @@ const submitErrorMessage = (code?: string): string => {
   }
 };
 
+type FieldErrors = Partial<Record<keyof LeadFormValues, boolean>>;
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Validação client-side (espelha as regras do backend) — devolve os campos inválidos.
+const validate = (v: LeadFormValues): FieldErrors => {
+  const errors: FieldErrors = {};
+  if (!v.name.trim()) errors.name = true;
+  if (!EMAIL_RE.test(v.email.trim())) errors.email = true;
+  if (!/^\d{9}$/.test(v.contact)) errors.contact = true;
+  if (!v.district) errors.district = true;
+  if (!v.town) errors.town = true;
+  if (v.type.length === 0) errors.type = true;
+  return errors;
+};
+
+// Campo a assinalar quando o backend devolve um erro de validação específico.
+const fieldForCode = (code?: string): keyof LeadFormValues | undefined => {
+  switch (code) {
+    case ErrorCodes.Form.INVALID_EMAIL:
+      return 'email';
+    case ErrorCodes.Form.INVALID_CONTACT:
+      return 'contact';
+    case ErrorCodes.Form.INVALID_BUDGET:
+      return 'budget';
+    case ErrorCodes.Form.INVALID_DISTRICT:
+      return 'district';
+    case ErrorCodes.Form.INVALID_TYPE:
+      return 'type';
+    default:
+      return undefined;
+  }
+};
+
 const initialValues: LeadFormValues = {
   name: '',
   email: '',
@@ -69,6 +103,7 @@ const PublicForm: React.FC = () => {
   const [status, setStatus] = useState<Status>('loading');
   const [linkError, setLinkError] = useState('');
   const [values, setValues] = useState<LeadFormValues>(initialValues);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
@@ -97,14 +132,24 @@ const PublicForm: React.FC = () => {
 
   // Ao mudar de distrito, limpar o concelho.
   // No contacto, manter apenas dígitos (máx. 9) — a validação final fica no backend.
+  // Ao editar um campo, limpa-se o respetivo estado de erro.
   const handleChange = <K extends keyof LeadFormValues>(key: K, value: LeadFormValues[K]) => {
     setValues((prev) => {
       if (key === 'district') return { ...prev, district: value as string, town: '' };
       if (key === 'contact') return { ...prev, contact: (value as string).replace(/\D/g, '').slice(0, 9) };
       return { ...prev, [key]: value };
     });
+    setFieldErrors((prev) => {
+      if (!prev[key] && !(key === 'district' && prev.town)) return prev;
+      const next = { ...prev };
+      delete next[key];
+      if (key === 'district') delete next.town;
+      return next;
+    });
+    setSubmitError('');
   };
 
+  // Botão ativo só quando todos os campos obrigatórios estão preenchidos.
   const canSubmit =
     Boolean(values.name.trim()) &&
     Boolean(values.email.trim()) &&
@@ -117,6 +162,14 @@ const PublicForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit || isSubmitting) return;
+
+    const errors = validate(values);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      setSubmitError('Campos inválidos.');
+      return;
+    }
+
     setSubmitError('');
     setIsSubmitting(true);
     try {
@@ -134,11 +187,18 @@ const PublicForm: React.FC = () => {
       setValues(initialValues);
       setStatus('submitted');
     } catch (err) {
-      const message =
-        err instanceof ApiRequestError
-          ? submitErrorMessage(err.errorCode)
-          : 'Não foi possível ligar ao servidor. Tenta novamente.';
-      setSubmitError(message);
+      if (err instanceof ApiRequestError) {
+        // Assinala o campo correspondente ao erro devolvido pelo backend.
+        if (err.errorCode === ErrorCodes.Form.MISSING_FIELDS) {
+          setFieldErrors((prev) => ({ ...prev, name: !values.name.trim(), town: !values.town }));
+        } else {
+          const field = fieldForCode(err.errorCode);
+          if (field) setFieldErrors((prev) => ({ ...prev, [field]: true }));
+        }
+        setSubmitError(submitErrorMessage(err.errorCode));
+      } else {
+        setSubmitError('Não foi possível ligar ao servidor. Tenta novamente.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -175,6 +235,7 @@ const PublicForm: React.FC = () => {
 
             <LeadForm
               values={values}
+              errors={fieldErrors}
               onChange={handleChange}
               districts={DISTRICTS}
               concelhos={concelhos}

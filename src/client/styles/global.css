@@ -2,7 +2,7 @@
 @import "@heroui/styles";
 
 :root {
-  --accent: #9353D3;             /* violeta da marca (Style 04) — faltava este override */
+  --accent: #0E7C8B;
   --field-radius: 0.875rem;      /* cantos dos inputs ~14px (escopo só ao campo, não ao --radius global) */
   --field-background: var(--default); /* inputs preenchidos a cinza claro em vez do branco por defeito */
 }

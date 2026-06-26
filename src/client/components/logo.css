@@ -7,9 +7,8 @@
 .logo__mark {
   width: 19px;
   height: 19px;
-  border-radius: 6px;
-  transform: rotate(45deg);
-  background: var(--accent);
+  flex-shrink: 0;
+  display: block;
 }
 
 .logo__text {
