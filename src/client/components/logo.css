@@ -17,3 +17,13 @@
   letter-spacing: -0.01em;
   color: var(--foreground);
 }
+
+.logo--stacked {
+  flex-direction: column;
+  gap: 0;
+}
+
+.logo--stacked .logo__text {
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}

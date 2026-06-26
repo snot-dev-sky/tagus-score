@@ -20,9 +20,17 @@ const ERROR_MESSAGES: Record<string, string> = {
 const GoogleMark = () => (
   <span
     style={{
-      width: 18, height: 18, borderRadius: '50%', background: '#fff',
-      border: '1px solid #e4e4e7', color: '#4285F4', fontSize: 12, fontWeight: 700,
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      width: 18,
+      height: 18,
+      borderRadius: '50%',
+      background: '#fff',
+      border: '1px solid #e4e4e7',
+      color: '#4285F4',
+      fontSize: 12,
+      fontWeight: 700,
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       flexShrink: 0,
     }}
   >
@@ -43,7 +51,7 @@ const Signup: React.FC = () => {
   const matched = confirm.length > 0 && confirm === password;
   const canSubmit = useMemo(
     () => Boolean(name && email && password && matched),
-    [name, email, password, matched],
+    [name, email, password, matched]
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,7 +66,7 @@ const Signup: React.FC = () => {
     } catch (err) {
       const message =
         err instanceof ApiRequestError
-          ? ERROR_MESSAGES[err.errorCode ?? ''] ?? err.message
+          ? (ERROR_MESSAGES[err.errorCode ?? ''] ?? err.message)
           : 'Não foi possível ligar ao servidor. Tenta novamente.';
       setError(message);
     } finally {
@@ -67,12 +75,10 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface p-8 sm:bg-background sm:p-10">
-      <div className="flex justify-center sm:justify-start">
-        <Logo />
-      </div>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-surface p-8 sm:bg-background sm:p-10">
+      <Logo variant="stacked" />
 
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex w-full items-center justify-center">
         <div className="w-full max-w-[360px] sm:rounded-[18px] sm:border sm:border-border sm:bg-surface sm:p-8 sm:shadow-sm">
           <p className="text-center text-[13px] text-foreground/60 sm:text-left">Get started</p>
           <h2 className="mb-6 text-center text-[26px] font-bold tracking-[-0.02em] text-foreground sm:text-left">
@@ -137,7 +143,9 @@ const Signup: React.FC = () => {
 
             <div className="my-1.5 flex items-center gap-3">
               <span className="h-px flex-1 bg-border" />
-              <span className="text-[11px] font-semibold tracking-wider text-foreground/55">OR</span>
+              <span className="text-[11px] font-semibold tracking-wider text-foreground/55">
+                OR
+              </span>
               <span className="h-px flex-1 bg-border" />
             </div>
 
@@ -154,7 +162,10 @@ const Signup: React.FC = () => {
 
           <p className="mt-5 text-center text-[13px] text-foreground/60">
             Already have an account?{' '}
-            <RouterLink to="/login" className={`${linkVariants().base()} text-[13px] font-semibold text-accent`}>
+            <RouterLink
+              to="/login"
+              className={`${linkVariants().base()} text-[13px] font-semibold text-accent`}
+            >
               Sign in
             </RouterLink>
           </p>

@@ -1,11 +1,16 @@
 import React from 'react';
 import './logo.css';
 
-const TagusMark: React.FC = () => (
+interface TagusMarkProps {
+  size?: number;
+}
+
+const TagusMark: React.FC<TagusMarkProps> = ({ size = 19 }) => (
   <svg
     className="logo__mark"
-    width="19"
-    height="19"
+    width={size}
+    height={size}
+    style={{ width: size, height: size }}
     viewBox="0 0 48 48"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -21,11 +26,28 @@ const TagusMark: React.FC = () => (
   </svg>
 );
 
-const Logo: React.FC = () => (
-  <div className="logo">
-    <TagusMark />
-    <span className="logo__text">Tagus Score</span>
-  </div>
-);
+type LogoVariant = 'horizontal' | 'stacked';
+
+interface LogoProps {
+  variant?: LogoVariant;
+}
+
+const Logo: React.FC<LogoProps> = ({ variant = 'horizontal' }) => {
+  if (variant === 'stacked') {
+    return (
+      <div className="logo logo--stacked">
+        <TagusMark size={52} />
+        <span className="logo__text">Tagus Score</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="logo">
+      <TagusMark />
+      <span className="logo__text">Tagus Score</span>
+    </div>
+  );
+};
 
 export default Logo;
